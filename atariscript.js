@@ -103,10 +103,10 @@ newVel = 0;
 
 class Paddle {
 
-  constructor() {
-    this.center = [canvas.width / 2, canvas.height / 50];
-    this.width = canvas.width / 20;
-    this.height = canvas.height / 50;
+  constructor(width, height) {
+    this.center = [canvas.width / 2, height * 2];
+    this.width = width;
+    this.height = height;
     this.color = "000000";
     this.vel = 0;
   }
@@ -160,8 +160,8 @@ function setUpContext() {
   // canvas.addEventListener("keydown", testing)
 
   // I found that - 20 worked well for me, YMMV
-  canvas.width = window.innerWidth - 20;
-  canvas.height = window.innerHeight - 20;
+  canvas.width = window.innerWidth - 22;
+  canvas.height = window.innerHeight - 22;
   canvas.style.border = "1px solid black";
 
   // Set up the context for the animation
