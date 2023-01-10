@@ -6,7 +6,23 @@ const randomizer = 1; // controls the random speed increase/decrease after bounc
 class Brick {
 
   constructor(x, y, width, height) {
+    this.center = [x, y];
+    this.width = width;
+    this.height = height;
+    this.color = "#000000";
+  }
 
+  break() {
+
+  }
+
+  draw() {
+    context.beginPath();
+    context.strokeStyle = this.color;
+    context.fillStyle = this.color;
+    context.rect(this.center[0] - this.width / 2, this.center[1] - this.height / 2, this.width, this.height);
+    context.fill();
+    context.stroke();
   }
 
 }
@@ -113,7 +129,7 @@ newVel = 0;
 class Paddle {
 
   constructor(width, height) {
-    this.center = [canvas.width / 2, canvas.height - height * 2];
+    this.center = [canvas.width / 2, canvas.height - height / 2];
     this.width = width;
     this.height = height;
     this.color = "000000";
@@ -154,7 +170,7 @@ class Paddle {
     context.beginPath();
     context.strokeStyle = this.color;
     context.fillStyle = this.color;
-    context.rect(this.center[0] - this.width / 2, this.center[1] + this.height / 2, this.width, this.height);
+    context.rect(this.center[0] - this.width / 2, this.center[1] - this.height / 2, this.width, this.height);
     context.fill();
     context.stroke();
   }

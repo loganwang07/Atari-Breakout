@@ -17,6 +17,7 @@ function drawAll()
         ball.draw();
         sleep(3);
         death_count += 1;
+        console.log(death_count);
     }
     if (death_count >= 3) {
         return 0; // TO-DO: ADD DEATH SCREEN
