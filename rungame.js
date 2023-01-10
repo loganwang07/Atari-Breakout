@@ -1,7 +1,7 @@
 function drawAll()
 {
     ball.move();
-    ball.bounce();
+    ball.bounce(paddle.center, paddle.width, paddle.height);
     paddle.move();
 
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -15,7 +15,7 @@ context = setUpContext();
 
 ball = new Ball(canvas.width / 2, canvas.height / 2, 10, context);
 console.log(ball);
-paddle = new Paddle(canvas.width / 20, canvas.height / 100);
+paddle = new Paddle(canvas.width / 20, canvas.height / 150);
 console.log(paddle);
 
 window.requestAnimationFrame(drawAll);
