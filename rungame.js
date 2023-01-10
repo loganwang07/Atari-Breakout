@@ -1,3 +1,5 @@
+death_count = 0;
+
 function drawAll()
 {
     ball.move();
@@ -9,7 +11,21 @@ function drawAll()
     paddle.draw();
 
     window.requestAnimationFrame(drawAll);
+
+    if (ball.center[1] - ball.radius > canvas.height) {
+        ball = new Ball(canvas.width / 2, canvas.height / 2, 10, context);
+        ball.draw();
+        sleep(3);
+        death_count += 1;
+    }
+    if (death_count >= 3) {
+        return 0; // TO-DO: ADD DEATH SCREEN
+    }
 }
+
+async function sleep(sec) {
+    await sleep(sec * 1000);
+  }
 
 context = setUpContext();
 

@@ -1,12 +1,12 @@
-const min_start_angle = 25 // 0-45
-const min_game_angle = 20 // 0-45
-const speed_divisor = 250 // higher is slower
-const randomizer = 0 // suggested less than 10
+const min_start_angle = 25; // 0-45, ensures the ball does not have too steep/shallow a trajectory
+const min_game_angle = 20; // 0-45, ensures the ball does not develop too steep/shallow a trajectory
+const speed_divisor = 250; // controls the speed of the ball, higher is slower
+const randomizer = 1; // controls the random speed increase/decrease after bounces, suggested less than 10
 
 class Brick {
 
   constructor(x, y, width, height) {
-    
+
   }
 
 }
@@ -122,11 +122,11 @@ class Paddle {
 
   key_down(e) {
     if (e.keyCode === 37) {
-      this.vel = -5;
+      this.vel = -8;
       newVel = this.vel;
     }
     else if (e.keyCode === 39) {
-      this.vel = 5;
+      this.vel = 8;
       newVel = this.vel;
     }
   }
