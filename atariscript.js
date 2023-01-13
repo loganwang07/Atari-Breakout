@@ -9,11 +9,15 @@ class Brick {
     this.center = [x, y];
     this.width = width;
     this.height = height;
-    this.color = "#000000";
+    this.color = "black";
   }
 
-  break() {
-
+  break(ball) {
+    if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[0] - ball.radius < this.center[1] + this.height / 2 && ball.vel[1] < 0) {
+      this.color = "white";
+      this.draw();
+      return true;
+    }
   }
 
   draw() {
@@ -60,30 +64,26 @@ class Ball {
     this.center[1] += this.vel[1];
   }
 
-  bounce(paddle_center, paddle_width, paddle_height) {
+  bounce(paddle) {
     if (this.center[0] + this.radius > canvas.width) {
       this.center[0] = canvas.width - this.radius;
       this.nudge();
       if (this.vel[0] > 0) {this.vel[0] *= -1;}
-      console.log(ball);
     }
     if (this.center[0] - this.radius < 0) {
       this.center[0] = this.radius;
       this.nudge();
       if (this.vel[0] < 0) {this.vel[0] *= -1;}
-      console.log(ball);
     }
-    if (this.center[1] + this.radius > paddle_center[1] - paddle_height / 2 && this.center[0] > paddle_center[0] - paddle_width / 2 && this.center[0] < paddle_center[0] + paddle_width / 2) {
-      this.center[1] = paddle_center[1] - paddle_height / 2 - this.radius;
+    if (this.center[1] + this.radius > paddle.center[1] - paddle.height / 2 && this.center[0] > paddle.center[0] - paddle.width / 2 && this.center[0] < paddle.center[0] + paddle.width / 2) {
+      this.center[1] = paddle.center[1] - paddle.height / 2 - this.radius;
       this.accelerate();
       if (this.vel[1] > 0) {this.vel[1] *= -1;}
-      console.log(ball);
     }
     if (this.center[1] - this.radius < 0) {
       this.center[1] = this.radius;
       this.accelerate();
       if (this.vel[1] < 0) {this.vel[1] *= -1;}
-      console.log(ball);
     }
   }
 
