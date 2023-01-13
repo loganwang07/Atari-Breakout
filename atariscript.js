@@ -1,6 +1,6 @@
 const min_start_angle = 25; // 0-45, ensures the ball does not have too steep/shallow a trajectory
 const min_game_angle = 20; // 0-45, ensures the ball does not develop too steep/shallow a trajectory
-const speed_divisor = 250; // controls the speed of the ball, higher is slower
+const speed_divisor = 300; // controls the speed of the ball, higher is slower
 const randomizer = 1; // controls the random speed increase/decrease after bounces, suggested less than 10
 
 class Brick {
@@ -13,11 +13,28 @@ class Brick {
   }
 
   break(ball) {
-    if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[0] - ball.radius < this.center[1] + this.height / 2 && ball.vel[1] < 0) {
+    // if ball hits brick from the bottom
+    if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[1] > this.center[1] + this.height / 2 && ball.vel[1] < 0) {
       this.color = "white";
       this.draw();
-      return true;
+      return "bottom";
+    // if ball hits brick from the top
+    } else if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] - this.height / 2 && ball.vel[1] > 0) {
+      this.color = "white";
+      this.draw();
+      return "top";
+    // if ball hits brick from the left
+    } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] - this.width / 2 && ball.vel[0] > 0) {
+      this.color = "white";
+      this.draw();
+      return "left";
+    // if ball hits brick from the right
+    } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[0] > this.center[0] + this.width / 2 && ball.vel[0] < 0) {
+      this.color = "white";
+      this.draw();
+      return "right";
     }
+    return "none";
   }
 
   draw() {
@@ -191,9 +208,9 @@ function setUpContext() {
 
 function testing(e) {
   if (e.which === 37) {
-    paddle.vel[0] = -3;
+    paddle.vel[0] = -5;
   }
   else if (e.which === 39) {
-    paddle.vel[1] = 3;
+    paddle.vel[1] = 5;
   }
 }

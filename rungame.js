@@ -1,6 +1,6 @@
-const brick_spacing = 10;
-const bricks_per_row = 10;
-const bricks_per_column = 10;
+const brick_spacing = 5;
+const bricks_per_row = 8;
+const bricks_per_column = 8;
 death_count = 0;
 
 function drawAll()
@@ -9,10 +9,13 @@ function drawAll()
     ball.bounce(paddle);
     paddle.move();
     for (let i = 0; i < bricks.length; i++) {
-        broken = bricks[i].break(ball);
-        if (broken) {
+        broken = bricks[i].break(ball)
+        if (broken != "none") {
             bricks.splice(i, 1);
-            ball.vel[1] *= 1;
+            if (broken == "top" && ball.vel[1] > 0) {ball.vel[1] *= -1;}
+            else if (broken == "bottom" && ball.vel[1] < 0) {ball.vel[1] *= -1;}
+            else if (broken == "left" && ball.vel[0] > 0) {ball.vel[0] *= -1;}
+            else if (broken == "right" && ball.vel[0] < 0) {ball.vel[0] *= -1;}
         }
     }
 
@@ -28,7 +31,7 @@ function drawAll()
     if (ball.center[1] - ball.radius > canvas.height) {
         ball = new Ball(canvas.width / 2, canvas.height / 2, 10, context);
         ball.draw();
-        // sleep(3);
+        sleep(3);
         death_count += 1;
         console.log(death_count);
     }
@@ -45,7 +48,7 @@ async function sleep(sec) {
 context = setUpContext();
 
 ball = new Ball(canvas.width / 2, canvas.height / 2, 10);
-paddle = new Paddle(canvas.width / 20, canvas.height / 150);
+paddle = new Paddle(canvas.width / 15, canvas.height / 150);
 
 const bricks = [];
 for (let i = 1; i <= bricks_per_row; i++) {
