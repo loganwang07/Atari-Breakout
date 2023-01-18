@@ -2,6 +2,8 @@ const min_start_angle = 25; // 0-45, ensures the ball does not have too steep/sh
 const min_game_angle = 20; // 0-45, ensures the ball does not develop too steep/shallow a trajectory
 const speed_divisor = 300; // controls the speed of the ball, higher is slower
 const randomizer = 1; // controls the random speed increase/decrease after bounces, suggested less than 10
+const speed_increase = 1/50; // controls how much the ball speeds up each bounce, suggested less than 1/10
+const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"] // different colors the bricks can be, keep list length 6
 
 class Brick {
 
@@ -9,7 +11,7 @@ class Brick {
     this.center = [x, y];
     this.width = width;
     this.height = height;
-    this.color = "black";
+    this.color = brick_colors[Math.floor(Math.random()*brick_colors.length)];
   }
 
   break(ball) {
@@ -83,12 +85,12 @@ class Ball {
     }
     if (this.center[1] + this.radius > paddle.center[1] - paddle.height / 2 && this.center[0] > paddle.center[0] - paddle.width / 2 && this.center[0] < paddle.center[0] + paddle.width / 2) {
       this.center[1] = paddle.center[1] - paddle.height / 2 - this.radius;
-      this.accelerate();
+      this.nudge();
       if (this.vel[1] > 0) {this.vel[1] *= -1;}
     }
     if (this.center[1] - this.radius < 0) {
       this.center[1] = this.radius;
-      this.accelerate();
+      this.nudge();
       if (this.vel[1] < 0) {this.vel[1] *= -1;}
     }
   }
@@ -108,14 +110,14 @@ class Ball {
 
   accelerate() {
     if (Math.atan(Math.abs(this.vel[1]) / Math.abs(this.vel[0])) * 180 / Math.PI < min_game_angle) {
-      this.vel[0] += (-0.25 + randomizer * (Math.random() / 2 - 0.25)) * (Math.abs(this.vel[0]) / this.vel[0]);
-      this.vel[1] += (0.75 + randomizer * (Math.random() / 2 - 0.25)) * (Math.abs(this.vel[1]) / this.vel[1]);
+      this.vel[0] += (-0.5 + speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[0]) / this.vel[0]);
+      this.vel[1] += (0.5 + speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[1]) / this.vel[1]);
     } else if (Math.atan(Math.abs(this.vel[1]) / Math.abs(this.vel[0])) * 180 / Math.PI > 90 - min_game_angle) {
-      this.vel[0] += (0.75 + randomizer * (Math.random() / 2 - 0.25)) * (Math.abs(this.vel[0]) / this.vel[0]);
-      this.vel[1] += (-0.25 + randomizer * (Math.random() / 2 - 0.25)) * (Math.abs(this.vel[1]) / this.vel[1]);
+      this.vel[0] += (0.5 + speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[0]) / this.vel[0]);
+      this.vel[1] += (-0.5 + speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[1]) / this.vel[1]);
     } else {
-      this.vel[0] += 0.25 + randomizer * (Math.random() / 2 - 0.25);
-      this.vel[1] += 0.25 + randomizer * (Math.random() / 2 - 0.25);
+      this.vel[0] += (speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[0]) / this.vel[0]);
+      this.vel[1] += (speed_increase + randomizer * (Math.random() * speed_increase * 2 - speed_increase)) * (Math.abs(this.vel[1]) / this.vel[1]);
     }
   }
 
@@ -143,11 +145,11 @@ class Paddle {
 
   key_down(e) {
     if (e.keyCode === 37) {
-      this.vel = -7;
+      this.vel = -8;
       new_vel = this.vel;
     }
     else if (e.keyCode === 39) {
-      this.vel = 7;
+      this.vel = 8;
       new_vel = this.vel;
     }
   }

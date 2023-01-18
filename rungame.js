@@ -13,6 +13,7 @@ function draw_all()
     for (let i = 0; i < bricks.length; i++) {
         broken = bricks[i].break(ball)
         if (broken != "none") {
+            ball.accelerate();
             bricks.splice(i, 1);
             score += 10;
             console.log(score);
@@ -56,10 +57,10 @@ context = set_up_context();
 ball = new Ball(canvas.width / 2, 3 * canvas.height / 4, 10);
 paddle = new Paddle(canvas.width / 10, canvas.height / 150);
 
-const bricks = [];
+var bricks = [];
 for (let i = 1; i <= bricks_per_row; i++) {
     for (let j = 1; j <= bricks_per_column; j++) {
-        brick = new Brick((i - 0.5) * canvas.width / bricks_per_row, (j - 0.5) * canvas.height / (bricks_per_column * 2), canvas.width / bricks_per_row - brick_spacing, canvas.height / (bricks_per_column * 2) - brick_spacing);
+        brick = new Brick((i - 0.5) * canvas.width / bricks_per_row, canvas.height / 12 + (j - 0.5) * canvas.height / (bricks_per_column * 2.4), canvas.width / bricks_per_row - brick_spacing, canvas.height / (bricks_per_column * 2.4) - brick_spacing);
         bricks.push(brick);
     }
 }
