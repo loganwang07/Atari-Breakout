@@ -65,17 +65,6 @@ class Ball {
     this.width = 3;
   }
 
-  get x() {
-    return this.center[0];
-  }
-
-  set x(newX) {
-    this.center[0] = newX;
-  }
-
-  get y() {return this.center[0];}
-  set y(newX) {this.center[0] = newX;}
-
   move() {
     this.center[0] += this.vel[0];
     this.center[1] += this.vel[1];
@@ -141,8 +130,7 @@ class Ball {
   }
 }
 
-newVel = 0;
-
+new_vel = 0;
 class Paddle {
 
   constructor(width, height) {
@@ -155,26 +143,26 @@ class Paddle {
 
   key_down(e) {
     if (e.keyCode === 37) {
-      this.vel = -8;
-      newVel = this.vel;
+      this.vel = -7;
+      new_vel = this.vel;
     }
     else if (e.keyCode === 39) {
-      this.vel = 8;
-      newVel = this.vel;
+      this.vel = 7;
+      new_vel = this.vel;
     }
   }
 
   key_up(e) {
     if (e.keyCode === 37 || e.keyCode === 39) {
       this.vel = 0;
-      newVel = this.vel;
+      new_vel = this.vel;
     }
   }
 
   move() {
     canvas.addEventListener("keydown", this.key_down);
     canvas.addEventListener("keyup", this.key_up);
-    this.vel = newVel
+    this.vel = new_vel
     this.center[0] += this.vel;
     if (this.center[0] - this.width / 2 > canvas.width) {
       this.center[0] = -1 * this.width / 2;
@@ -193,7 +181,7 @@ class Paddle {
   }
 }
 
-function setUpContext() {
+function set_up_context() {
 
   console.log("Window is %d by %d", window.innerWidth, window.innerHeight);
   canvas = document.getElementById("mainCanvas");
@@ -204,13 +192,4 @@ function setUpContext() {
 
   context = canvas.getContext("2d");
   return context;
-}
-
-function testing(e) {
-  if (e.which === 37) {
-    paddle.vel[0] = -5;
-  }
-  else if (e.which === 39) {
-    paddle.vel[1] = 5;
-  }
 }

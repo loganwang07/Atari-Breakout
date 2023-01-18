@@ -1,9 +1,11 @@
-const brick_spacing = 5;
-const bricks_per_row = 8;
-const bricks_per_column = 8;
-death_count = 0;
+const brick_spacing = 3;
+const bricks_per_row = 10;
+const bricks_per_column = 10;
 
-function drawAll()
+death_count = 0;
+score = 0;
+
+function draw_all()
 {
     ball.move();
     ball.bounce(paddle);
@@ -12,6 +14,8 @@ function drawAll()
         broken = bricks[i].break(ball)
         if (broken != "none") {
             bricks.splice(i, 1);
+            score += 10;
+            console.log(score);
             if (broken == "top" && ball.vel[1] > 0) {ball.vel[1] *= -1;}
             else if (broken == "bottom" && ball.vel[1] < 0) {ball.vel[1] *= -1;}
             else if (broken == "left" && ball.vel[0] > 0) {ball.vel[0] *= -1;}
@@ -26,10 +30,12 @@ function drawAll()
         bricks[i].draw();
     }
 
-    window.requestAnimationFrame(drawAll);
+    window.requestAnimationFrame(draw_all);
 
     if (ball.center[1] - ball.radius > canvas.height) {
-        ball = new Ball(canvas.width / 2, canvas.height / 2, 10, context);
+        ball.color = "white";
+        ball.draw();
+        ball = new Ball(canvas.width / 2, 3 * canvas.height / 4, 10);
         ball.draw();
         sleep(3);
         death_count += 1;
@@ -45,17 +51,17 @@ async function sleep(sec) {
     await sleep(sec * 1000);
   }
 
-context = setUpContext();
+context = set_up_context();
 
-ball = new Ball(canvas.width / 2, canvas.height / 2, 10);
-paddle = new Paddle(canvas.width / 15, canvas.height / 150);
+ball = new Ball(canvas.width / 2, 3 * canvas.height / 4, 10);
+paddle = new Paddle(canvas.width / 10, canvas.height / 150);
 
 const bricks = [];
 for (let i = 1; i <= bricks_per_row; i++) {
     for (let j = 1; j <= bricks_per_column; j++) {
-        brick = new Brick(i * canvas.width / (bricks_per_row + 1), j * canvas.height / (bricks_per_column * 2 + 2), canvas.width / (bricks_per_row + 1) - brick_spacing, canvas.height / (bricks_per_column * 2 + 2) - brick_spacing);
+        brick = new Brick((i - 0.5) * canvas.width / bricks_per_row, (j - 0.5) * canvas.height / (bricks_per_column * 2), canvas.width / bricks_per_row - brick_spacing, canvas.height / (bricks_per_column * 2) - brick_spacing);
         bricks.push(brick);
     }
 }
 
-window.requestAnimationFrame(drawAll);
+window.requestAnimationFrame(draw_all);
