@@ -5,7 +5,23 @@ const randomizer = 1; // controls the random speed increase/decrease after each 
 const speed_changer = 1/32; // controls how much the ball speeds up/slows down after each bounce, suggested less than 1/10
 var paddle_speed = 8; // controls the starting speed of the paddle, suggested 8
 const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"] // different colors the bricks can be, keep list length 6
+const bounce_sound = new sound("bounce.mp3");
 // 1st/4rd entries increase/decrease ball speed, 2nd/5th entries increase/decrease paddle speed, 3rd/6th entries decrease/increase paddle length
+
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function(){
+    this.sound.play();
+  }
+  this.stop = function(){
+    this.sound.pause();
+  }
+}
 
 class Brick {
 
@@ -19,15 +35,19 @@ class Brick {
   break(ball) {
     // if ball hits brick from the bottom
     if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[1] > this.center[1] + this.height / 2 && ball.vel[1] < 0) {
+      bounce_sound.play();
       return "bottom";
     // if ball hits brick from the top
     } else if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] - this.height / 2 && ball.vel[1] > 0) {
+      bounce_sound.play();
       return "top";
     // if ball hits brick from the left
     } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] - this.width / 2 && ball.vel[0] > 0) {
+      bounce_sound.play();
       return "left";
     // if ball hits brick from the right
     } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[0] > this.center[0] + this.width / 2 && ball.vel[0] < 0) {
+      bounce_sound.play();
       return "right";
     }
     return "none";
@@ -66,26 +86,32 @@ class Ball {
     this.center[1] += this.vel[1];
   }
 
-  bounce(paddle) {
+  bounce(paddle, end) {
     if (this.center[0] + this.radius > canvas.width) {
       this.center[0] = canvas.width - this.radius;
       this.nudge();
-      if (this.vel[0] > 0) {this.vel[0] *= -1;}
+      if (this.vel[0] > 0) {this.vel[0] *= -1; bounce_sound.play();}
     }
     if (this.center[0] - this.radius < 0) {
       this.center[0] = this.radius;
       this.nudge();
-      if (this.vel[0] < 0) {this.vel[0] *= -1;}
-    }
-    if (this.center[1] + this.radius > paddle.center[1] - paddle.height / 2 && this.center[0] > paddle.center[0] - paddle.width / 2 && this.center[0] < paddle.center[0] + paddle.width / 2) {
-      this.center[1] = paddle.center[1] - paddle.height / 2 - this.radius;
-      this.accelerate();
-      if (this.vel[1] > 0) {this.vel[1] *= -1;}
+      if (this.vel[0] < 0) {this.vel[0] *= -1; bounce_sound.play();}
     }
     if (this.center[1] - this.radius < 0) {
       this.center[1] = this.radius;
       this.nudge();
-      if (this.vel[1] < 0) {this.vel[1] *= -1;}
+      if (this.vel[1] < 0) {this.vel[1] *= -1; bounce_sound.play();}
+    }
+    if (end) {
+      if (this.center[1] + this.radius > canvas.height) {
+        this.center[1] = canvas.height - this.radius;
+        this.nudge();
+        if (this.vel[1] > 0) {this.vel[1] *= -1; bounce_sound.play();}
+      }
+    } else if (this.center[1] + this.radius > paddle.center[1] - paddle.height / 2 && this.center[0] > paddle.center[0] - paddle.width / 2 && this.center[0] < paddle.center[0] + paddle.width / 2) {
+      this.center[1] = paddle.center[1] - paddle.height / 2 - this.radius;
+      this.accelerate();
+      if (this.vel[1] > 0) {this.vel[1] *= -1; bounce_sound.play();}
     }
   }
 

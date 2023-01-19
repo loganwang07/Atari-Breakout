@@ -1,27 +1,39 @@
-const brick_spacing = 3;
+const brick_spacing = 5;
 const bricks_per_row = 10;
 const bricks_per_column = 10;
-const ball_speed_effects = 1.3; // minimum 1, controls how much effect each brick gives to the game, higher is more
+const ball_speed_effects = 1.15; // minimum 1, controls how much effect each brick gives to the game, higher is more
 const paddle_speed_effects = 1.2; // minimum 1, controls how much effect each brick gives to the game, higher is more
-const paddle_length_effects = 1.1; // minimum 1, controls how much effect each brick gives to the game, higher is more
+const paddle_length_effects = 1.15; // minimum 1, controls how much effect each brick gives to the game, higher is more
 
-death_count = 0;
-score = 0;
+var death_count = 0;
+var score = 0;
+var end = false;
 
 function draw_all()
-{
+{   
+
+    if (end == false) {
+        context.font = "25px Helvetica";
+        context.fillStyle = "black";
+        context.textAlign = "center";
+        context.fillText("Balls: " + death_count, canvas.width / 20, canvas.height / 20);
+        context.fillText("Score: " + score, 19 * canvas.width / 20, canvas.height / 20);
+    }
+
     ball.move();
-    ball.bounce(paddle);
+    ball.bounce(paddle, end);
     paddle.move();
+
     for (let i = 0; i < bricks.length; i++) {
         broken = bricks[i].break(ball)
         if (broken != "none") {
-            if (bricks[i].color == brick_colors[0]) {ball.vel[0] *= ball_speed_effects; ball.vel[1] *= ball_speed_effects;}
-            else if (bricks[i].color == brick_colors[1]) {paddle_speed *= paddle_speed_effects;}
-            else if (bricks[i].color == brick_colors[2]) {paddle.width /= paddle_length_effects;}
-            else if (bricks[i].color == brick_colors[3]) {ball.vel[0] /= ball_speed_effects; ball.vel[1] /= ball_speed_effects;}
-            else if (bricks[i].color == brick_colors[4]) {paddle_speed /= paddle_speed_effects;}
-            else if (bricks[i].color == brick_colors[5]) {paddle.width *= paddle_length_effects;}
+            if (bricks[i].color == brick_colors[0]) {ball.vel[0] *= ball_speed_effects; ball.vel[1] *= ball_speed_effects; ball.color = brick_colors[0];}
+            else if (bricks[i].color == brick_colors[1]) {paddle_speed *= paddle_speed_effects; ball.color = brick_colors[1];}
+            else if (bricks[i].color == brick_colors[2]) {paddle.width /= paddle_length_effects; ball.color = brick_colors[2];}
+            else if (bricks[i].color == brick_colors[3]) {ball.vel[0] /= ball_speed_effects; ball.vel[1] /= ball_speed_effects; ball.color = brick_colors[3];}
+            else if (bricks[i].color == brick_colors[4]) {paddle_speed /= paddle_speed_effects; ball.color = brick_colors[4];}
+            else if (bricks[i].color == brick_colors[5]) {paddle.width *= paddle_length_effects; ball.color = brick_colors[5];}
+            paddle.color = "black";
             bricks[i].color = "white";
             bricks[i].draw();
             bricks.splice(i, 1);
@@ -41,26 +53,26 @@ function draw_all()
         bricks[i].draw();
     }
 
-    window.requestAnimationFrame(draw_all);
-
-    if (ball.center[1] - ball.radius > canvas.height) {
-        ball.color = "white";
-        ball.draw();
+    if (ball.center[1] - ball.radius > canvas.height && end == false) {
+        paddle_speed = 8;
+        paddle.width = canvas.width / 10;
+        paddle.draw();
         ball = new Ball(canvas.width / 2, 3 * canvas.height / 4, 10);
         ball.draw();
-        sleep(3);
-        death_count += 1;
-        console.log(death_count);
+        setTimeout(() => {death_count += 1; window.requestAnimationFrame(draw_all);}, 1000);
+    } else {window.requestAnimationFrame(draw_all);}
+
+    if (bricks.length == 0) {
+        end = true;
+        ball.color = "black";
+        context.font = "50px Helvetica";
+        context.textAlign = "center";
+        context.fillText("Congratulations, you won!", canvas.width / 2, canvas.height / 3);
+        context.fillText("You died " + death_count + " times.", canvas.width / 2, canvas.height / 2);
+        context.fillText("Reload the page to try again.", canvas.width / 2, 2 * canvas.height / 3);
     }
 
-    if (death_count >= 3) {
-        return 0; // TO-DO: ADD DEATH SCREEN
-    }
 }
-
-async function sleep(sec) {
-    await sleep(sec * 1000);
-  }
 
 context = set_up_context();
 
