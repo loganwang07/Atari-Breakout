@@ -1,6 +1,9 @@
 const brick_spacing = 3;
 const bricks_per_row = 10;
 const bricks_per_column = 10;
+const ball_speed_effects = 1.3; // minimum 1, controls how much effect each brick gives to the game, higher is more
+const paddle_speed_effects = 1.2; // minimum 1, controls how much effect each brick gives to the game, higher is more
+const paddle_length_effects = 1.1; // minimum 1, controls how much effect each brick gives to the game, higher is more
 
 death_count = 0;
 score = 0;
@@ -13,7 +16,14 @@ function draw_all()
     for (let i = 0; i < bricks.length; i++) {
         broken = bricks[i].break(ball)
         if (broken != "none") {
-            ball.accelerate();
+            if (bricks[i].color == brick_colors[0]) {ball.vel[0] *= ball_speed_effects; ball.vel[1] *= ball_speed_effects;}
+            else if (bricks[i].color == brick_colors[1]) {paddle_speed *= paddle_speed_effects;}
+            else if (bricks[i].color == brick_colors[2]) {paddle.width /= paddle_length_effects;}
+            else if (bricks[i].color == brick_colors[3]) {ball.vel[0] /= ball_speed_effects; ball.vel[1] /= ball_speed_effects;}
+            else if (bricks[i].color == brick_colors[4]) {paddle_speed /= paddle_speed_effects;}
+            else if (bricks[i].color == brick_colors[5]) {paddle.width *= paddle_length_effects;}
+            bricks[i].color = "white";
+            bricks[i].draw();
             bricks.splice(i, 1);
             score += 10;
             console.log(score);
