@@ -4,8 +4,9 @@ const speed_divisor = 300; // controls the speed of the ball, higher is slower
 const randomizer = 1; // controls the random speed increase/decrease after each bounce, suggested less than 10
 const speed_changer = 1/32; // controls how much the ball speeds up/slows down after each bounce, suggested less than 1/10
 var paddle_speed = 8; // controls the starting speed of the paddle, suggested 8
-const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"] // different colors the bricks can be, keep list length 6
+const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple", "brown"] // different colors the bricks can be, keep list length 7
 // 1st/4rd entries increase/decrease ball speed, 2nd/5th entries increase/decrease paddle speed, 3rd/6th entries decrease/increase paddle length
+// 7th entry is multiball
 
 const bounce_sound = new sound("bounce.mp3");
 const death_sound = new sound("death.mp3");
@@ -36,24 +37,21 @@ class Brick {
   }
 
   break(ball) {
-    // if ball hits brick from the bottom
     if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[1] > this.center[1] + this.height / 2 && ball.vel[1] < 0) {
       bounce_sound.play();
       return "bottom";
-    // if ball hits brick from the top
     } else if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] - this.height / 2 && ball.vel[1] > 0) {
       bounce_sound.play();
       return "top";
-    // if ball hits brick from the left
     } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] - this.width / 2 && ball.vel[0] > 0) {
       bounce_sound.play();
       return "left";
-    // if ball hits brick from the right
     } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[0] > this.center[0] + this.width / 2 && ball.vel[0] < 0) {
       bounce_sound.play();
       return "right";
+    } else {
+      return "none";
     }
-    return "none";
   }
 
   draw() {
