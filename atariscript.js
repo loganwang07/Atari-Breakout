@@ -38,16 +38,16 @@ class Brick {
   }
 
   break(ball) {
-    if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[1] > this.center[1] + this.height / 2 && ball.vel[1] < 0) {
+    if (ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[1] > this.center[1] + this.height / 2 && ball.vel[1] < 0) {
       bounce_sound.play();
       return "bottom";
-    } else if (ball.center[0] > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] + this.width / 2 && ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] - this.height / 2 && ball.vel[1] > 0) {
+    } else if (ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] - this.height / 2 && ball.vel[1] > 0) {
       bounce_sound.play();
       return "top";
-    } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] - this.width / 2 && ball.vel[0] > 0) {
+    } else if (ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[0] + ball.radius > this.center[0] - this.width / 2 && ball.center[0] < this.center[0] - this.width / 2 && ball.vel[0] > 0) {
       bounce_sound.play();
       return "left";
-    } else if (ball.center[1] > this.center[1] - this.height / 2 && ball.center[1] < this.center[1] + this.height / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[0] > this.center[0] + this.width / 2 && ball.vel[0] < 0) {
+    } else if (ball.center[1] + ball.radius > this.center[1] - this.height / 2 && ball.center[1] - ball.radius < this.center[1] + this.height / 2 && ball.center[0] - ball.radius < this.center[0] + this.width / 2 && ball.center[0] > this.center[0] + this.width / 2 && ball.vel[0] < 0) {
       bounce_sound.play();
       return "right";
     } else {
@@ -57,7 +57,7 @@ class Brick {
 
   draw() {
     context.beginPath();
-    context.strokeStyle = this.color;
+    context.strokeStyle = "white";
     context.fillStyle = this.color;
     context.rect(this.center[0] - this.width / 2, this.center[1] - this.height / 2, this.width, this.height);
     context.fill();

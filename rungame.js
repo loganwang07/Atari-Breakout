@@ -1,4 +1,4 @@
-const brick_spacing = 5;
+const brick_spacing = 0;
 const bricks_per_row = 10;
 const bricks_per_column = 10;
 const ball_speed_effects = 1.15; // minimum 1, controls how much effect each brick gives to the game, higher is more
