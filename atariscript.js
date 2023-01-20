@@ -4,7 +4,8 @@ const speed_divisor = 300; // controls the speed of the ball, higher is slower
 const randomizer = 1; // controls the random speed increase/decrease after each bounce, suggested less than 10
 const speed_changer = 1/32; // controls how much the ball speeds up/slows down after each bounce, suggested less than 1/10
 var paddle_speed = 8; // controls the starting speed of the paddle, suggested 8
-const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple", "brown"] // different colors the bricks can be, keep list length 7
+const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple", "brown"]; // different colors the bricks can be, keep list length 7
+const brick_effects = ["increase ball speed", "increase paddle speed", "decrease paddle legnth", "decrease ball speed", "decrease paddle speed", "increase paddle length", "add a ball to play"];
 // 1st/4rd entries increase/decrease ball speed, 2nd/5th entries increase/decrease paddle speed, 3rd/6th entries decrease/increase paddle length
 // 7th entry is multiball
 

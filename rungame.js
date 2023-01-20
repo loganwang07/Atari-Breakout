@@ -8,7 +8,59 @@ const paddle_length_effects = 1.15; // minimum 1, controls how much effect each 
 var balls = [];
 var death_count = 0;
 var score = 0;
+var ready = false;
 var end = false;
+
+context = set_up_context();
+
+context.font = "150px Monospace";
+context.textAlign = "center";
+context.fillText("Atari Breakout", canvas.width / 2, canvas.height / 2);
+context.font = "50px Monospace";
+context.fillText("Press enter to start", canvas.width / 2, canvas.height / 2 + 100);
+
+canvas.addEventListener("keydown", instructions);
+
+function instructions(e) {
+    if (e.keyCode === 13) {
+        canvas.removeEventListener("keydown", instructions);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = "40px Monospace";
+        for (let i = 0; i < brick_colors.length; i++) {
+            context.fillStyle = brick_colors[i];
+            context.fillText(capitalize(brick_colors[i]) + " bricks " + brick_effects[i] + ".", canvas.width / 2, (i + 1) * canvas.height / (brick_colors.length + 2))
+        }
+        context.fillStyle = "black";
+        context.fillText("Press enter to start.", canvas.width / 2, (brick_colors.length + 1) * canvas.height / (brick_colors.length + 2))
+
+        canvas.addEventListener("keydown", start_sequence);
+    }
+}
+
+var bricks = [];
+
+function start_sequence(e) {
+    if (e.keyCode === 13) {
+        canvas.removeEventListener("keydown", start_sequence);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        balls.push(new Ball(canvas.width / 2, 3 * canvas.height / 4, 10));
+        balls[0].draw();
+        paddle = new Paddle(canvas.width / 10, canvas.height / 150);
+        paddle.draw();
+
+        for (let i = 1; i <= bricks_per_row; i++) {
+            for (let j = 1; j <= bricks_per_column; j++) {
+                brick = new Brick((i - 0.5) * canvas.width / bricks_per_row, canvas.height / 12 + (j - 0.5) * canvas.height / (bricks_per_column * 2.4), canvas.width / bricks_per_row - brick_spacing, canvas.height / (bricks_per_column * 2.4) - brick_spacing);
+                brick.draw();
+                bricks.push(brick);
+            }
+        }
+
+        setTimeout(() => {window.requestAnimationFrame(draw_all);}, 1000);
+    }
+}
+
+
 
 function draw_all()
 {   
@@ -16,10 +68,11 @@ function draw_all()
     just_died = false;
 
     if (end != true) {
-        context.font = "25px Helvetica";
+        context.font = "25px Monospace";
         context.textAlign = "center";
-        context.fillText("Balls: " + death_count, canvas.width / 20, canvas.height / 20);
-        context.fillText("Score: " + score, 19 * canvas.width / 20, canvas.height / 20);
+        context.fillStyle = "black";
+        context.strokeText("Balls: " + death_count, canvas.width / 20, canvas.height / 20);
+        context.strokeText("Score: " + score, 19 * canvas.width / 20, canvas.height / 20);
     }
 
     for (let i = 0; i < balls.length; i++) {
@@ -90,7 +143,7 @@ function draw_all()
         for (let i = 0; i < balls.length; i++) {
             balls[i].color = "black";
         }
-        context.font = "50px Helvetica";
+        context.font = "50px Monospace";
         context.textAlign = "center";
         context.fillText("Congratulations, you won!", canvas.width / 2, canvas.height / 5);
         context.fillText("Your score was " + score + ".", canvas.width / 2, 2 * canvas.height / 5);
@@ -101,17 +154,6 @@ function draw_all()
 
 }
 
-context = set_up_context();
-
-balls.push(new Ball(canvas.width / 2, 3 * canvas.height / 4, 10));
-paddle = new Paddle(canvas.width / 10, canvas.height / 150);
-
-var bricks = [];
-for (let i = 1; i <= bricks_per_row; i++) {
-    for (let j = 1; j <= bricks_per_column; j++) {
-        brick = new Brick((i - 0.5) * canvas.width / bricks_per_row, canvas.height / 12 + (j - 0.5) * canvas.height / (bricks_per_column * 2.4), canvas.width / bricks_per_row - brick_spacing, canvas.height / (bricks_per_column * 2.4) - brick_spacing);
-        bricks.push(brick);
-    }
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-window.requestAnimationFrame(draw_all);
