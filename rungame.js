@@ -12,11 +12,10 @@ var end = false;
 function draw_all()
 {   
 
-    if (end == false) {
+    if (end != true) {
         context.font = "25px Helvetica";
-        context.fillStyle = "black";
         context.textAlign = "center";
-        context.fillText("Balls: " + death_count, canvas.width / 20, canvas.height / 20);
+        context.fillText("Balls: " + death_count, 100, 100);
         context.fillText("Score: " + score, 19 * canvas.width / 20, canvas.height / 20);
     }
 
@@ -38,11 +37,11 @@ function draw_all()
             bricks[i].draw();
             bricks.splice(i, 1);
             score += 10;
-            console.log(score);
             if (broken == "top" && ball.vel[1] > 0) {ball.vel[1] *= -1;}
             else if (broken == "bottom" && ball.vel[1] < 0) {ball.vel[1] *= -1;}
             else if (broken == "left" && ball.vel[0] > 0) {ball.vel[0] *= -1;}
             else if (broken == "right" && ball.vel[0] < 0) {ball.vel[0] *= -1;}
+            if (bricks.length == 0) {victory_sound.play();}
         }
     }
 
@@ -54,6 +53,7 @@ function draw_all()
     }
 
     if (ball.center[1] - ball.radius > canvas.height && end == false) {
+        death_sound.play();
         paddle_speed = 8;
         paddle.width = canvas.width / 10;
         paddle.draw();
@@ -67,9 +67,11 @@ function draw_all()
         ball.color = "black";
         context.font = "50px Helvetica";
         context.textAlign = "center";
-        context.fillText("Congratulations, you won!", canvas.width / 2, canvas.height / 3);
-        context.fillText("You died " + death_count + " times.", canvas.width / 2, canvas.height / 2);
-        context.fillText("Reload the page to try again.", canvas.width / 2, 2 * canvas.height / 3);
+        context.fillText("Congratulations, you won!", canvas.width / 2, canvas.height / 5);
+        context.fillText("Your score was " + score + ".", canvas.width / 2, 2 * canvas.height / 5);
+        if (death_count == 1) {context.fillText("You used " + death_count + " ball.", canvas.width / 2, 3 * canvas.height / 5);}
+        else {context.fillText("You used " + death_count + " balls.", canvas.width / 2, 3 * canvas.height / 5);}
+        context.fillText("Reload the page to try again!", canvas.width / 2, 4 * canvas.height / 5);
     }
 
 }

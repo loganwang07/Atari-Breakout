@@ -5,8 +5,11 @@ const randomizer = 1; // controls the random speed increase/decrease after each 
 const speed_changer = 1/32; // controls how much the ball speeds up/slows down after each bounce, suggested less than 1/10
 var paddle_speed = 8; // controls the starting speed of the paddle, suggested 8
 const brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"] // different colors the bricks can be, keep list length 6
-const bounce_sound = new sound("bounce.mp3");
 // 1st/4rd entries increase/decrease ball speed, 2nd/5th entries increase/decrease paddle speed, 3rd/6th entries decrease/increase paddle length
+
+const bounce_sound = new sound("bounce.mp3");
+const death_sound = new sound("death.mp3");
+const victory_sound = new sound("victory.mp3");
 
 function sound(src) {
   this.sound = document.createElement("audio");
@@ -217,7 +220,6 @@ class Paddle {
 
 function set_up_context() {
 
-  console.log("Window is %d by %d", window.innerWidth, window.innerHeight);
   canvas = document.getElementById("mainCanvas");
 
   canvas.width = window.innerWidth - 22;
