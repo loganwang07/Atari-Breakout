@@ -67,14 +67,6 @@ function draw_all()
 
     just_died = false;
 
-    if (end != true) {
-        context.font = "25px Monospace";
-        context.textAlign = "center";
-        context.fillStyle = "black";
-        context.strokeText("Balls: " + death_count, canvas.width / 20, canvas.height / 20);
-        context.strokeText("Score: " + score, 19 * canvas.width / 20, canvas.height / 20);
-    }
-
     for (let i = 0; i < balls.length; i++) {
         balls[i].move();
         balls[i].bounce(paddle, end);
